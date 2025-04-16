@@ -5,6 +5,10 @@ import { PersonaModule } from './persona/persona.module';
 import { VehiculoModule } from './vehiculo/vehiculo.module';
 import { ClienteModule } from './cliente/cliente.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { ResponseInterceptor } from './response/response.interceptor';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -18,9 +22,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     }),
     PersonaModule, 
     VehiculoModule, 
-    ClienteModule
+    ClienteModule, AuthModule, UsersModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {provide: APP_INTERCEPTOR, useClass: ResponseInterceptor},
+  ],
 })
 export class AppModule {}
